@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-export default function Appbar() {
+const Appbar = () => {
   const classes = useStyles();
   const { user, logout, login } = useAuth();
 
@@ -133,4 +133,5 @@ export default function Appbar() {
       </AppBar>
     </>
   );
-}
+};
+export default Appbar;

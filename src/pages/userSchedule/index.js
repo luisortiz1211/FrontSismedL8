@@ -11,7 +11,7 @@ import Loading from "@/components/Loading";
 export default function index() {
   const { data, error } = useSWR(`/schedule_users`, fetcher);
   //console.log("pacientes de resgreso", data);
-  if (error) return <div>No se pudo cargar la información de usuarios</div>;
+  if (error) return <div>Parece que si fucniona</div>;
   if (!data) return <Loading />;
 
   return (
