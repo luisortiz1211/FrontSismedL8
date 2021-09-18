@@ -21,7 +21,7 @@ import Image from "next/image";
 import Layoutmain from "@/components/Layoutmain";
 import LayoutSecondary from "@/components/LayoutSecondary";
 import withAuth from "./../hocs/withAuth";
-import { Container } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {

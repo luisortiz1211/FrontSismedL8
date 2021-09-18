@@ -129,23 +129,16 @@ const Login = () => {
   };
   return (
     <div>
-      
       <CssBaseline />
       <Paper elevation={6} style={{ margin: "20px" }}>
         <Grid
-         container
-         justifyContent="center"
-         alignItems="center"
-         component="main"
-         className={(classes.root, classes.image)}
+          container
+          justifyContent="center"
+          alignItems="center"
+          component="main"
+          className={(classes.root, classes.image)}
         >
-          <Grid
-            item
-            xs={12}
-            md={6}
-
-            component="main"
-          >
+          <Grid item xs={12} md={6} component="main">
             <Grid
               container
               direction="column"
@@ -246,7 +239,8 @@ const Login = () => {
                 <Grid container>
                   <Grid item style={{ color: "#414A4F" }}>
                     <Link href="#" passHref>
-                      <MuiLink>Olvido su contraseña?</MuiLink></Link>
+                      <MuiLink>Olvido su contraseña?</MuiLink>
+                    </Link>
                   </Grid>
                 </Grid>
               </form>

@@ -23,6 +23,7 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Paper from "@material-ui/core/Paper";
 import ChargeInformation from "@/components/ChargeInformation";
 import { FormControl, Select, MenuItem } from "@material-ui/core";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -126,7 +127,10 @@ const userDetails = () => {
   return (
     <LayoutSecondary>
       <Container maxWidth="lg">
-        <Title>Información de Usuario</Title>
+        <Title>
+          <HowToRegIcon style={{ color: "#092435", fontSize: 35 }} />
+          Información de Usuario
+        </Title>
         <Paper elevation={6} style={{ padding: "10px", margin: "20px" }}>
           <Container>
             <form

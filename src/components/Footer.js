@@ -24,7 +24,9 @@ function Copyright() {
 function Copyright1() {
   const classes = useStyles();
   return (
-    <div style={{ backgroundColor: "#092435", padding: "5px" ,color:"#60CCD9" }}>
+    <div
+      style={{ backgroundColor: "#092435", padding: "5px", color: "#60CCD9" }}
+    >
       <Typography variant="body2" align="center">
         {"Desarrollador  por LO "}
       </Typography>
@@ -52,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#60CCD9",
   },
 }));
-const StickyFooter=()=> {
+const StickyFooter = () => {
   const classes = useStyles();
 
   return (
@@ -82,28 +84,18 @@ const StickyFooter=()=> {
             </Box>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Typography
-              variant="subtitle1"
-              align="center"
-            >
+            <Typography variant="subtitle1" align="center">
               Atención de Lunes a Viernes de 9:00 a 17:00
             </Typography>
           </Grid>
           <Grid item xs={12} md={2}>
-            <Typography
-              variant="subtitle1"
-              align="center"
-            >
+            <Typography variant="subtitle1" align="center">
               Av. Amazonas y Tomas de Berlanga
             </Typography>
           </Grid>
 
           <Grid item xs={12} md={2}>
-            <Typography
-              variant="subtitle1"
-              align="center"
-              component="p"
-            >
+            <Typography variant="subtitle1" align="center" component="p">
               0999905876 {"/"} 026988569
             </Typography>
           </Grid>
@@ -113,5 +105,6 @@ const StickyFooter=()=> {
       <Copyright1 />
     </>
   );
-}
+};
+
 export default StickyFooter;

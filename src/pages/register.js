@@ -23,6 +23,7 @@ import Select from "@material-ui/core/Select";
 
 import Title from "@/components/Title";
 import Divider from "@material-ui/core/Divider";
+import AddReactionIcon from "@mui/icons-material/AddReaction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -139,7 +140,11 @@ const Register = () => {
   return (
     <div>
       <Container maxWidth="lg"></Container>
-      <Title>Crear cuenta de usuario</Title>
+      <Title>
+        <AddReactionIcon style={{ color: "#092435", fontSize: 35 }} />
+        {"  "}
+        Crear cuenta de usuario
+      </Title>
       <Paper elevation={6} style={{ margin: "20px" }}>
         <Container>
           <form
@@ -371,7 +376,7 @@ const Register = () => {
                   render={({ field }) => (
                     <FormControl
                       variant="outlined"
-                      label="Tipo de usuario"
+                      label="Tipo"
                       className={classes.textField}
                       //style={{ minWidth: "auto" }}
                     >
@@ -398,6 +403,7 @@ const Register = () => {
                   render={({ field }) => (
                     <FormControl
                       variant="outlined"
+                      label="ESpecialidad"
                       className={classes.textField}
                       // style={{ minWidth: "auto" }}
                     >
@@ -405,17 +411,17 @@ const Register = () => {
                         //{...field}
 
                         id="employment"
-                        label="Especialidad"
+                        labelID="Especialidad"
                         {...register("employment", { required: true })}
                         defaultValue="ASISTENTE MÉDICO"
                       >
-                        <MenuItem value="MEDICINA GENERAL">
+                        <MenuItem value={"MEDICINA GENERAL"}>
                           MEDICINA GENERAL
                         </MenuItem>
-                        <MenuItem value="ASISTENTE MÉDICO">
+                        <MenuItem value={"ASISTENTE MÉDICO"}>
                           ASISTENTE MEDICO
                         </MenuItem>
-                        <MenuItem value="ENFERMERIA">ENFERMERIA</MenuItem>
+                        <MenuItem value={"ENFERMERIA"}>ENFERMERIA</MenuItem>
                       </Select>
                     </FormControl>
                   )}
@@ -461,6 +467,7 @@ const Register = () => {
                   Cancelar
                 </Button>
               </Grid>
+
               <Grid
                 item
                 md={3}

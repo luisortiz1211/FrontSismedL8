@@ -8,7 +8,7 @@ import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxHeight: "100vh",
+    minHeight: "80vh",
   },
   image: {
     backgroundImage: `url(${"/portada.jpg"})`,
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         : theme.palette.grey[900],
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: "auto",
+    height: "80vh",
   },
 }));
 export default function ChargeInformation() {

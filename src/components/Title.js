@@ -20,7 +20,6 @@ export default function Title({ children }) {
             //justifyContent="space-around"
             alignItems="center"
           >
-            <DoubleArrowIcon style={{ color: "#092435", fontSize: 42 }} />
             <h1>
               {"  "}
               {children}

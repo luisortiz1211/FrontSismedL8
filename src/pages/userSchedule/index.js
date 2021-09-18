@@ -23,6 +23,8 @@ import withAuth from "@/hocs/withAuth";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import ChargeInformation from "@/components/ChargeInformation";
 import ScheduleUser from "@/components/ScheduleUser";
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 const columns = [
   {
@@ -128,7 +130,12 @@ const index = () => {
     <LayoutSecondary>
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
-        <Title>Agenda de médicos</Title>
+        <Title>
+          <PeopleAltIcon
+            style={{ color: "#092435", fontSize: 35, paddingTop: "5px" }}
+          />
+          {"  "}Agenda de médicos
+        </Title>
         <Paper
           className={classes.root}
           elevation={6}
@@ -211,7 +218,7 @@ const index = () => {
                                         key={row.id}
                                         passHref
                                       >
-                                        <BorderColorIcon />
+                                        <ManageSearchIcon />
                                       </Link>
                                     </Button>
                                   </Grid>

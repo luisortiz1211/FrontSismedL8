@@ -2,7 +2,6 @@ import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import SignInSide from "./SignInSide";
 import Layout from "@/components/Layoutmain";
 import Container from "@material-ui/core/Container";
 import Title from "@/components/Title";
@@ -10,7 +9,7 @@ import First from "@/components/First";
 
 export default function Home() {
   return (
-    <React.StrictMode>
+    <React.Fragment>
       <div>
         <Head>
           <title>SISMED</title>
@@ -23,6 +22,6 @@ export default function Home() {
       <Container maxWidth="lg">
         <First />
       </Container>
-    </React.StrictMode>
+    </React.Fragment>
   );
 }

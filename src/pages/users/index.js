@@ -22,6 +22,7 @@ import { Grid } from "@material-ui/core";
 import withAuth from "@/hocs/withAuth";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import ChargeInformation from "@/components/ChargeInformation";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 const columns = [
   {
@@ -127,7 +128,11 @@ const index = () => {
     <LayoutSecondary>
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
-        <Title>Usuarios</Title>
+        <Title>
+          <GroupAddIcon style={{ color: "#092435", fontSize: 40 }} /> {"  "}
+          Usuarios
+        </Title>
+
         <Paper
           className={classes.root}
           elevation={6}

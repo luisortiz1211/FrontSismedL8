@@ -29,17 +29,24 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import withAuth from "@/hocs/withAuth";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import ChargeInformation from "@/components/ChargeInformation";
-import ScheduleUser from "@/components/ScheduleUser";
+import AddIcon from "@material-ui/icons/Add";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Routes from "@/constants/routes";
+import { ScheduleUser } from "@/lib/scheduleuser";
+import { useForm, Controller } from "react-hook-form";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 const columns = [
   {
     id: "id",
-    label: "N°",
+    label: "",
     minWidth: 10,
     backgroundColor: "#BBF0E8",
     align: "left",
@@ -65,11 +72,18 @@ const columns = [
     backgroundColor: "#BBF0E8",
     align: "left",
   },
+  {
+    id: "free1",
+    label: "",
+    minWidth: 100,
+    backgroundColor: "#BBF0E8",
+    align: "left",
+  },
 
   {
     id: "botonSelect",
     label: "",
-    minWidth: 200,
+    minWidth: 50,
     backgroundColor: "#BBF0E8",
     align: "left",
   },
@@ -93,16 +107,55 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+    padding: "40px",
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    backgroundColor: theme.palette.tertiary.main,
+  },
+  textField: {
+    paddingBottom: "15px",
+    color: "#414A4F",
+  },
+
+  formControl: {
+    minWidth: 300,
+    paddingBottom: "15px",
+    color: "#414A4F",
+    paddingRight: "10px",
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  mpaper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    margin: theme.spacing(3),
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 const index = () => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const { id } = router.query;
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -113,12 +166,8 @@ const index = () => {
     setPage(0);
   };
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
   const { data, error } = useSWR(`/users/${id}/schedule_users`, fetcher);
-  console.log("Horarios médico", data);
+  //console.log("Horarios médico", data);
   if (error)
     return (
       <div>
@@ -131,47 +180,15 @@ const index = () => {
         <Loading />
       </div>
     );
-  return (
-    /*<Container>
-      <List
-        component="nav"
-        aria-labelledby="nested-list-subheader"
-        className={classes.root}
-      >
-        <ListItem button onClick={handleClick}>
-          <ListItemIcon>
-            <PermContactCalendarIcon />
-          </ListItemIcon>
-          <ListItemText primary="Horarios de atención" />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {data.data.map((scheduleUser) => {
-              return (
-                <ListItem
-                  button
-                  className={classes.nested}
-                  key={scheduleUser.id}
-                >
-                  <ListItemIcon>
-                    <NavigateNextIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={scheduleUser.userDay} />
-                  <ListItemText primary={scheduleUser.startTime} />
-                  <ListItemText primary={scheduleUser.finishTime} />
-                </ListItem>
-              );
-            })}
-          </List>
-        </Collapse>
-      </List>
-    </Container>*/
 
+  return (
     <LayoutSecondary>
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
-        <Title>Horario de médico</Title>
+        <Title>
+          <LibraryBooksIcon style={{ color: "#092435", fontSize: 35 }} />
+          {"  "}Agenda de médico
+        </Title>
         <Paper
           className={classes.root}
           elevation={6}
@@ -187,11 +204,39 @@ const index = () => {
                       align={column.align}
                       style={{
                         minWidth: column.minWidth,
-                        backgroundColor: column.backgroundColor,
-                        fontWeight: 400,
+                        //backgroundColor: column.backgroundColor,
                       }}
                     >
                       {column.label}
+                      {column.id === "botonSelect" ? (
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Link
+                            href={`/userSchedule/schedulenew/${id}/`}
+                            as={`/userSchedule/schedulenew/${id}/`}
+                            passHref
+                          >
+                            <Button
+                              variant="outlined"
+                              size="medium"
+                              style={{
+                                background: "#fff",
+                              }}
+                            >
+                              <AddIcon
+                                style={{ color: "#092435", border: "5px" }}
+                              />
+                              Añadir
+                            </Button>
+                          </Link>
+                        </Grid>
+                      ) : (
+                        ""
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -201,53 +246,53 @@ const index = () => {
                 {data.data
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
-                    const colorLine = row.id;
+                    const colorLine = row.Schedule_id;
+                    //console.log("horario de cada medico", colorLine);
                     return (
                       <TableRow
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.id}
+                        key={row.Schedule_id}
                         style={
                           colorLine % 2 == 0
                             ? { backgroundColor: "#BBF0E8" }
-                            : { backgroundColor: "" }
+                            : { backgroundColor: "#fff" }
                         }
                       >
-                        {columns.map((array) => {
-                          const value = row[array.id];
-
-                          <TableCell key={array.id} align={array.align}>
-                            {array.id}
-                            {array.label == "" ? (
-                              <Grid
-                                container
-                                direction="row"
-                                alignItems="center"
-                              >
-                                <Grid item>
-                                  <Button
-                                    variant="outlined"
-                                    size="medium"
-                                    style={{
-                                      background: "#60CCD9",
-                                    }}
-                                  >
-                                    <Link
-                                      href={`/userSchedule/${row.id}`}
-                                      as={`/userSchedule/${row.id}`}
-                                      key={row.id}
-                                      passHref
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.id && typeof value === "number"
+                                ? column.id(value)
+                                : value}{" "}
+                              {column.id === "botonSelect" &&
+                              column.label == "" ? (
+                                <Grid
+                                  container
+                                  direction="row"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                >
+                                  <Grid item>
+                                    <Button
+                                      variant="outlined"
+                                      size="medium"
+                                      style={{
+                                        background: "#60CCD9",
+                                      }}
+                                      href={`/userSchedule/scheduleupdate/${row.Schedule_id}`}
                                     >
                                       <BorderColorIcon />
-                                    </Link>
-                                  </Button>
+                                    </Button>
+                                  </Grid>
                                 </Grid>
-                              </Grid>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>;
+                              ) : (
+                                ""
+                              )}
+                            </TableCell>
+                          );
                         })}
                       </TableRow>
                     );
@@ -257,7 +302,7 @@ const index = () => {
           </TableContainer>
           <TablePagination
             labelRowsPerPage="Usuarios:"
-            rowsPerPageOptions={[10, 25, 100]}
+            rowsPerPageOptions={[7, 10, 25]}
             component="div"
             count={columns.length}
             rowsPerPage={rowsPerPage}
