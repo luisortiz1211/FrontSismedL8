@@ -7,7 +7,7 @@ export default function personalHistory() {
   return (
     <LayoutSecondary>
       <Container maxWidth="lg">
-        <Title>Antecedentes del paciente</Title>
+        <Title>Antecedentes del paciente- vacio</Title>
       </Container>
     </LayoutSecondary>
   );

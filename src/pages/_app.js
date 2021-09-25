@@ -1,14 +1,12 @@
-import React from "react";
-import "../styles/globals.css";
+import Appbar from "@/components/AppBar";
+import Footer from "@/components/Footer";
+import { AuthProvider } from "@/lib/auth";
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import Head from "next/head";
 import PropTypes from "prop-types";
-
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
-
-import Footer from "@/components/Footer";
-import Appbar from "@/components/AppBar";
+import React from "react";
+import "../styles/globals.css";
 import theme from "../styles/theme";
-import { AuthProvider } from "@/lib/auth";
 
 export default function App(props) {
   const { Component, pageProps } = props;

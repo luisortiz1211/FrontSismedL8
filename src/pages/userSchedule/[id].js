@@ -1,27 +1,13 @@
-import useSWR from "swr";
-import { fetcher } from "@/lib/utils";
-import Link from "next/link";
-import Loading from "@/components/Loading";
-import { useRouter } from "next/router";
-
-import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
-
-import React, { useState } from "react";
-import Title from "@/components/Title";
+import AnnounTitle from "@/components/AnnounTitle";
+import ChargeInformation from "@/components/ChargeInformation";
 import LayoutSecondary from "@/components/LayoutSecondary";
-import { CssBaseline, Link as Muilink } from "@material-ui/core";
-
+import Loading from "@/components/Loading";
+import Title from "@/components/Title";
+import { fetcher } from "@/lib/utils";
+import { Button, CssBaseline, Grid } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -29,53 +15,40 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button, TextField } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import withAuth from "@/hocs/withAuth";
-import BorderColorIcon from "@material-ui/icons/BorderColor";
-import ChargeInformation from "@/components/ChargeInformation";
 import AddIcon from "@material-ui/icons/Add";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import Routes from "@/constants/routes";
-import { ScheduleUser } from "@/lib/scheduleuser";
-import { useForm, Controller } from "react-hook-form";
+import BorderColorIcon from "@material-ui/icons/BorderColor";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import useSWR from "swr";
 
 const columns = [
   {
     id: "id",
-    label: "",
-    minWidth: 10,
+    label: "N°",
+    minWidth: 30,
     backgroundColor: "#BBF0E8",
     align: "left",
   },
   {
     id: "userDay",
     label: "Día",
-    minWidth: 100,
+    minWidth: 130,
     backgroundColor: "#BBF0E8",
     align: "left",
   },
   {
     id: "startTime",
     label: "Hora inicio",
-    minWidth: 100,
+    minWidth: 130,
     backgroundColor: "#BBF0E8",
     align: "left",
   },
   {
     id: "finishTime",
     label: "Hora fin",
-    minWidth: 100,
-    backgroundColor: "#BBF0E8",
-    align: "left",
-  },
-  {
-    id: "free1",
-    label: "",
-    minWidth: 100,
+    minWidth: 130,
     backgroundColor: "#BBF0E8",
     align: "left",
   },
@@ -155,7 +128,7 @@ const index = () => {
   const { id } = router.query;
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -186,7 +159,14 @@ const index = () => {
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
         <Title>
-          <LibraryBooksIcon style={{ color: "#092435", fontSize: 35 }} />
+          <LibraryBooksIcon
+            style={{
+              color: "#092435",
+              fontSize: 35,
+              position: "relative",
+              top: "6px",
+            }}
+          />
           {"  "}Agenda de médico
         </Title>
         <Paper
@@ -194,6 +174,8 @@ const index = () => {
           elevation={6}
           style={{ margin: "20px" }}
         >
+          <AnnounTitle>Agregar un horario al usuario</AnnounTitle>
+
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -204,7 +186,8 @@ const index = () => {
                       align={column.align}
                       style={{
                         minWidth: column.minWidth,
-                        //backgroundColor: column.backgroundColor,
+                        backgroundColor: column.backgroundColor,
+                        fontWeight: 400,
                       }}
                     >
                       {column.label}
@@ -246,19 +229,18 @@ const index = () => {
                 {data.data
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
-                    const colorLine = row.Schedule_id;
-                    //console.log("horario de cada medico", colorLine);
+                    const colorLine = row.schedule_id;
                     return (
                       <TableRow
                         hover
                         role="checkbox"
-                        tabIndex={-1}
-                        key={row.Schedule_id}
-                        style={
+                        //  tabIndex={-1}
+                        key={row.id}
+                        /* style={
                           colorLine % 2 == 0
                             ? { backgroundColor: "#BBF0E8" }
                             : { backgroundColor: "#fff" }
-                        }
+                        } */
                       >
                         {columns.map((column) => {
                           const value = row[column.id];
@@ -276,16 +258,19 @@ const index = () => {
                                   justifyContent="center"
                                 >
                                   <Grid item>
-                                    <Button
-                                      variant="outlined"
-                                      size="medium"
-                                      style={{
-                                        background: "#60CCD9",
-                                      }}
-                                      href={`/userSchedule/scheduleupdate/${row.Schedule_id}`}
+                                    <Link
+                                      href={`/userSchedule/scheduleupdate/${row.schedule_id}`}
                                     >
-                                      <BorderColorIcon />
-                                    </Button>
+                                      <Button
+                                        variant="outlined"
+                                        size="medium"
+                                        style={{
+                                          background: "#60CCD9",
+                                        }}
+                                      >
+                                        <BorderColorIcon />
+                                      </Button>
+                                    </Link>
                                   </Grid>
                                 </Grid>
                               ) : (
@@ -302,7 +287,7 @@ const index = () => {
           </TableContainer>
           <TablePagination
             labelRowsPerPage="Usuarios:"
-            rowsPerPageOptions={[7, 10, 25]}
+            rowsPerPageOptions={[10, 20, 50]}
             component="div"
             count={columns.length}
             rowsPerPage={rowsPerPage}

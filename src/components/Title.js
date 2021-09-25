@@ -1,6 +1,5 @@
+import { Grid } from "@material-ui/core";
 import React from "react";
-import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import { Grid, ListItemAvatar } from "@material-ui/core";
 import ButtonBack from "./ButtonBack";
 
 export default function Title({ children }) {
@@ -11,20 +10,14 @@ export default function Title({ children }) {
         direction="row"
         justifyContent="space-around"
         alignItems="center"
+        spacing={1}
         style={{ paddingTop: "10px" }}
       >
         <Grid item md={6}>
-          <Grid
-            container
-            direction="row"
-            //justifyContent="space-around"
-            alignItems="center"
-          >
-            <h1>
-              {"  "}
-              {children}
-            </h1>
-          </Grid>
+          <h1>
+            {"  "}
+            {children}
+          </h1>
         </Grid>
 
         <Grid item>

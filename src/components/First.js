@@ -1,27 +1,20 @@
-import React from "react";
-import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Link from "next/link";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import DateRangeIcon from "@material-ui/icons/DateRange";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import BallotIcon from "@material-ui/icons/Ballot";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import SearchIcon from "@material-ui/icons/Search";
-import Routes from "../constants/routes";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import Image from "next/image";
-import Layoutmain from "@/components/Layoutmain";
-import LayoutSecondary from "@/components/LayoutSecondary";
+import Link from "next/link";
+import React from "react";
+import Routes from "../constants/routes";
 import withAuth from "./../hocs/withAuth";
-import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +91,7 @@ const First = () => {
           <Grid item xs={12} md={8} component={Paper} elevation={6} square>
             <div className={classes.paper}>
               <Grid container justifyContent="space-around">
-                <Grid item md={2} xs={4}>
+                <Grid item md={2} xs={6}>
                   {" "}
                   <Link href={Routes.USERS}>
                     <Button
@@ -123,31 +116,33 @@ const First = () => {
                     </Button>
                   </Link>
                 </Grid>
-                <Grid item md={2} xs={4}>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    style={{
-                      color: "#60CCD9",
-                    }}
-                    color="primary"
-                  >
-                    <Grid
-                      container
-                      style={{ textAlign: "center" }}
-                      alignItems="center"
-                      justifyContent="center"
+                <Grid item md={2} xs={6}>
+                  <Link href={Routes.MEDICALHISTORY}>
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      style={{
+                        color: "#60CCD9",
+                      }}
+                      color="primary"
                     >
-                      <Grid item md={12}>
-                        <BallotIcon style={{ fontSize: 80 }} />
+                      <Grid
+                        container
+                        style={{ textAlign: "center" }}
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Grid item md={12}>
+                          <BallotIcon style={{ fontSize: 80 }} />
+                        </Grid>
+                        <Grid item md={12}>
+                          Historia clínica
+                        </Grid>
                       </Grid>
-                      <Grid item md={12}>
-                        Historia clinica
-                      </Grid>
-                    </Grid>
-                  </Button>
+                    </Button>
+                  </Link>
                 </Grid>
-                <Grid item md={2} xs={4}>
+                <Grid item md={2} xs={6}>
                   <Link href={Routes.PATIENTS}>
                     <Button
                       className={classes.button}
@@ -176,7 +171,7 @@ const First = () => {
               </Grid>
 
               <Grid container justifyContent="space-around">
-                <Grid item md={2} xs={4}>
+                <Grid item md={2} xs={6}>
                   {" "}
                   <Link href={Routes.SCHEDULEUSER}>
                     <Button
@@ -203,31 +198,33 @@ const First = () => {
                     </Button>
                   </Link>
                 </Grid>
-                <Grid item md={2} xs={4}>
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    style={{
-                      color: "#60CCD9",
-                    }}
-                    color="primary"
-                  >
-                    <Grid
-                      container
-                      style={{ textAlign: "center" }}
-                      alignItems="center"
-                      justifyContent="center"
+                <Grid item md={2} xs={6}>
+                  <Link href={Routes.SCHEDULEDAY}>
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      style={{
+                        color: "#60CCD9",
+                      }}
+                      color="primary"
                     >
-                      <Grid item md={12}>
-                        <DateRangeIcon style={{ fontSize: 80 }} />
+                      <Grid
+                        container
+                        style={{ textAlign: "center" }}
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Grid item md={12}>
+                          <DateRangeIcon style={{ fontSize: 80 }} />
+                        </Grid>
+                        <Grid item md={12}>
+                          Agenda Pacientes
+                        </Grid>
                       </Grid>
-                      <Grid item md={12}>
-                        Agenda Pacientes
-                      </Grid>
-                    </Grid>
-                  </Button>
+                    </Button>
+                  </Link>
                 </Grid>
-                <Grid item md={2} xs={4}>
+                <Grid item md={2} xs={6}>
                   <Link href={Routes.REGISTER}>
                     <Button
                       className={classes.button}

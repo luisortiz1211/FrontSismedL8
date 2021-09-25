@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import Title from "@/components/Title";
+import AnnounTitle from "@/components/AnnounTitle";
+import ChargeInformation from "@/components/ChargeInformation";
 import LayoutSecondary from "@/components/LayoutSecondary";
-import Container from "@material-ui/core/Container";
-import Link from "next/link";
-import { CssBaseline, Link as Muilink } from "@material-ui/core";
-import { fetcher } from "@/lib/utils";
-import useSWR from "swr";
 import Loading from "@/components/Loading";
-
-import { makeStyles } from "@material-ui/core/styles";
+import Title from "@/components/Title";
+import { fetcher } from "@/lib/utils";
+import { Button, CssBaseline, Grid } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,12 +15,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import withAuth from "@/hocs/withAuth";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
-import ChargeInformation from "@/components/ChargeInformation";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import Link from "next/link";
+import React, { useState } from "react";
+import useSWR from "swr";
 
 const columns = [
   {
@@ -86,13 +83,6 @@ const useStyles = makeStyles((theme) => ({
   button: {
     fontSize: "10px",
   },
-  paper: {
-    margin: theme.spacing(8, 4),
-    padding: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
 }));
 
 const index = () => {
@@ -129,7 +119,15 @@ const index = () => {
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
         <Title>
-          <GroupAddIcon style={{ color: "#092435", fontSize: 40 }} /> {"  "}
+          <GroupAddIcon
+            style={{
+              color: "#092435",
+              fontSize: 40,
+              position: "relative",
+              top: "9px",
+            }}
+          />{" "}
+          {"  "}
           Usuarios
         </Title>
 
@@ -138,6 +136,7 @@ const index = () => {
           elevation={6}
           style={{ margin: "20px" }}
         >
+          <AnnounTitle>Usuarios registrados en el sistema</AnnounTitle>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -202,22 +201,22 @@ const index = () => {
                                   alignItems="center"
                                 >
                                   <Grid item>
-                                    <Button
-                                      variant="outlined"
-                                      size="medium"
-                                      style={{
-                                        background: "#60CCD9",
-                                      }}
+                                    <Link
+                                      href={`/users/${row.id}`}
+                                      as={`/users/${row.id}`}
+                                      key={row.id}
+                                      passHref
                                     >
-                                      <Link
-                                        href={`/users/${row.id}`}
-                                        as={`/users/${row.id}`}
-                                        key={row.id}
-                                        passHref
+                                      <Button
+                                        variant="outlined"
+                                        size="medium"
+                                        style={{
+                                          background: "#60CCD9",
+                                        }}
                                       >
                                         <BorderColorIcon />
-                                      </Link>
-                                    </Button>
+                                      </Button>
+                                    </Link>
                                   </Grid>
                                 </Grid>
                               ) : (

@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Link as MuiLink } from "@material-ui/core";
 
+// Subtitulos del footer
 function Copyright() {
   const classes = useStyles();
   return (
@@ -21,14 +22,15 @@ function Copyright() {
     </div>
   );
 }
+// Subtitulos del footer
 function Copyright1() {
   const classes = useStyles();
   return (
     <div
       style={{ backgroundColor: "#092435", padding: "5px", color: "#60CCD9" }}
     >
-      <Typography variant="body2" align="center">
-        {"Desarrollador  por LO "}
+      <Typography variant="subtitle2" align="center">
+        {"Desarrollado por Luis Ortiz "}
       </Typography>
     </div>
   );
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#60CCD9",
   },
 }));
+// Footer
 const StickyFooter = () => {
   const classes = useStyles();
 
@@ -74,18 +77,22 @@ const StickyFooter = () => {
         >
           <Grid item xs={2} md={1}>
             <Box className={classes.logo}>
-              <Image
-                src="/logosismed1.png"
-                alt="Sismed"
-                width={100}
-                height={50}
-                color="#fff"
-              />
+              <Link href="/login">
+                <MuiLink>
+                  <Image
+                    src="/logosismed1.png"
+                    alt="Sismed"
+                    width={100}
+                    height={50}
+                    color="#BBF0E8"
+                  />
+                </MuiLink>
+              </Link>
             </Box>
           </Grid>
           <Grid item xs={12} md={2}>
             <Typography variant="subtitle1" align="center">
-              Atención de Lunes a Viernes de 9:00 a 17:00
+              Horario de atención: Lunes a Viernes de 9:00 a 17:00
             </Typography>
           </Grid>
           <Grid item xs={12} md={2}>
@@ -96,7 +103,7 @@ const StickyFooter = () => {
 
           <Grid item xs={12} md={2}>
             <Typography variant="subtitle1" align="center" component="p">
-              0999905876 {"/"} 026988569
+              0939573837 {"/"} 0999905876
             </Typography>
           </Grid>
         </Grid>

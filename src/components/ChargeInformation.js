@@ -1,14 +1,14 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Link from "next/link";
 import Routes from "@/constants/routes";
 import { Button } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Link from "next/link";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minHeight: "80vh",
+    //maxHeight: "100vh",
   },
   image: {
     backgroundImage: `url(${"/portada.jpg"})`,

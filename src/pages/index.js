@@ -1,11 +1,7 @@
-import React from "react";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Layout from "@/components/Layoutmain";
-import Container from "@material-ui/core/Container";
-import Title from "@/components/Title";
 import First from "@/components/First";
+import Container from "@material-ui/core/Container";
+import Head from "next/head";
+import React from "react";
 
 export default function Home() {
   return (

@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import Title from "@/components/Title";
+import AnnounTitle from "@/components/AnnounTitle";
+import ChargeInformation from "@/components/ChargeInformation";
 import LayoutSecondary from "@/components/LayoutSecondary";
-import Container from "@material-ui/core/Container";
-import Link from "next/link";
-import { CssBaseline, Link as Muilink } from "@material-ui/core";
-import { fetcher } from "@/lib/utils";
-import useSWR from "swr";
 import Loading from "@/components/Loading";
-
-import { makeStyles } from "@material-ui/core/styles";
+import Title from "@/components/Title";
+import { fetcher } from "@/lib/utils";
+import { Button, CssBaseline, Grid } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,14 +15,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import withAuth from "@/hocs/withAuth";
-import BorderColorIcon from "@material-ui/icons/BorderColor";
-import ChargeInformation from "@/components/ChargeInformation";
-import ScheduleUser from "@/components/ScheduleUser";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import Link from "next/link";
+import React, { useState } from "react";
+import useSWR from "swr";
 
 const columns = [
   {
@@ -132,7 +127,12 @@ const index = () => {
       <Container maxWidth="lg" direction="row">
         <Title>
           <PeopleAltIcon
-            style={{ color: "#092435", fontSize: 35, paddingTop: "5px" }}
+            style={{
+              color: "#092435",
+              fontSize: 35,
+              position: "relative",
+              top: "6px",
+            }}
           />
           {"  "}Agenda de médicos
         </Title>
@@ -141,6 +141,9 @@ const index = () => {
           elevation={6}
           style={{ margin: "20px" }}
         >
+          <AnnounTitle>
+            Seleccione un médico y agrege un horario de atención
+          </AnnounTitle>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -172,11 +175,6 @@ const index = () => {
                         role="checkbox"
                         tabIndex={-1}
                         key={row.id}
-                        style={
-                          colorLine % 2 == 0
-                            ? { backgroundColor: "#BBF0E8" }
-                            : { backgroundColor: "" }
-                        }
                       >
                         {columns.map((array) => {
                           const value = row[array.id];
@@ -191,11 +189,7 @@ const index = () => {
                                 : value && array.id === "roleUser"
                                 ? row.roleUser === "ROLE_MEDIC"
                                   ? "Médico"
-                                  : /* : row.roleUser === "ROLE_ASSISTENT"
-                                  ? "Asistente"
-                                  : row.roleUser === "ROLE_ADMIN"
-                                  ? "Administrador"*/
-                                    "No asignado"
+                                  : "No asignado"
                                 : value}
 
                               {array.label == "" ? (
@@ -205,22 +199,22 @@ const index = () => {
                                   alignItems="center"
                                 >
                                   <Grid item>
-                                    <Button
-                                      variant="outlined"
-                                      size="medium"
-                                      style={{
-                                        background: "#60CCD9",
-                                      }}
+                                    <Link
+                                      href={`/userSchedule/${row.id}`}
+                                      as={`/userSchedule/${row.id}`}
+                                      key={row.id}
+                                      passHref
                                     >
-                                      <Link
-                                        href={`/userSchedule/${row.id}`}
-                                        as={`/userSchedule/${row.id}`}
-                                        key={row.id}
-                                        passHref
+                                      <Button
+                                        variant="outlined"
+                                        size="medium"
+                                        style={{
+                                          background: "#60CCD9",
+                                        }}
                                       >
                                         <ManageSearchIcon />
-                                      </Link>
-                                    </Button>
+                                      </Button>
+                                    </Link>
                                   </Grid>
                                 </Grid>
                               ) : (
@@ -230,7 +224,6 @@ const index = () => {
                           ) : (
                             ""
                           );
-                          //////////////////////////////////////////
                         })}
                       </TableRow>
                     );

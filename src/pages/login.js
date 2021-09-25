@@ -1,23 +1,20 @@
-import React from "react";
-import { useAuth } from "@/lib/auth";
 import withoutAuth from "@/hocs/withoutAuth";
-import { useForm, Controller } from "react-hook-form";
+import { useAuth } from "@/lib/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import { Box, Link as MuiLink } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import { Link as MuiLink } from "@material-ui/core";
-import Link from "next/link";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { Box } from "@material-ui/core";
-import Image from "next/image";
-
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
   root: {

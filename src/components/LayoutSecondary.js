@@ -1,5 +1,3 @@
-import NavbarSecondary from "./NavbarSecondary";
-
 export default function LayoutSecondary({ children }) {
   return (
     <>

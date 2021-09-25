@@ -7,7 +7,7 @@ export default function index() {
   return (
     <LayoutSecondary>
       <Container maxWidth="lg">
-        <Title>Antecedente medicos de familiares</Title>
+        <Title>Antecedente medicos de familiares - Vacio</Title>
       </Container>
     </LayoutSecondary>
   );

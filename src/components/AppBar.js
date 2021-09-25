@@ -1,24 +1,19 @@
-import React, { useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { useAuth } from "@/lib/auth";
 import {
   AppBar,
-  Toolbar,
   Box,
-  Typography,
   Button,
-  IconButton,
-  MenuIcon,
   Grid,
+  Link as MuiLink,
+  Typography,
 } from "@material-ui/core";
-
-import { useAuth } from "@/lib/auth";
-import Link from "next/link";
-import { Link as MuiLink } from "@material-ui/core";
-import Image from "next/image";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Loading from "@/components/Loading";
 import Avatar from "@material-ui/core/Avatar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -79,13 +74,17 @@ const Appbar = () => {
           <Grid item xs={2} md={6}>
             {" "}
             <Box className={classes.logo} edge="star">
-              <Image
-                src="/logosismed1.png"
-                alt="Sismed"
-                width={100}
-                height={50}
-                color="#fff"
-              />
+              <Link href="/login">
+                <MuiLink>
+                  <Image
+                    src="/logosismed1.png"
+                    alt="Sismed"
+                    width={100}
+                    height={50}
+                    color="#fff"
+                  />
+                </MuiLink>
+              </Link>
             </Box>
           </Grid>
           <Grid item xs={12} md={4} lg={4}>

@@ -7,7 +7,7 @@ export default function index() {
   return (
     <LayoutSecondary>
       <Container maxWidth="lg">
-        <Title>Contactos de emergencia</Title>
+        <Title>Contactos de emergencia - Vacio</Title>
       </Container>
     </LayoutSecondary>
   );

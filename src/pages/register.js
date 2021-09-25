@@ -1,29 +1,26 @@
-import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Button, Link as MuiLink, TextField } from "@material-ui/core";
-import Link from "next/link";
-import { useAuth } from "@/lib/auth";
-import withAuth from "../hocs/withAuth";
-import LayoutSecondary from "@/components/LayoutSecondary";
-import Grid from "@material-ui/core/Grid";
-
-import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { Box } from "@material-ui/core";
-
-import { Paper, Container, InputLabel, MenuItem } from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-
+import AnnounTitle from "@/components/AnnounTitle";
 import Title from "@/components/Title";
+import Routes from "@/constants/routes";
+import { useAuth } from "@/lib/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  Button,
+  Container,
+  MenuItem,
+  Paper,
+  TextField,
+} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
+import FormControl from "@material-ui/core/FormControl";
+import Grid from "@material-ui/core/Grid";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
 import AddReactionIcon from "@mui/icons-material/AddReaction";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import withAuth from "../hocs/withAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,7 +87,6 @@ const schema = yup.object().shape({
   password: yup.string().required("Ingrese su contraseña"),
   password_confirmation: yup.string().required("Confirme su contraseña"),
   ci: yup.number().required("Confirme su número de cédula"),
-  //availableStatus: yup.boolean().required("Confirme el estado"),
   roleUser: yup.string().required("Confirme el rol de usuario"),
   employment: yup.string().required("Confirme la especialidad"),
 });
@@ -141,7 +137,14 @@ const Register = () => {
     <div>
       <Container maxWidth="lg"></Container>
       <Title>
-        <AddReactionIcon style={{ color: "#092435", fontSize: 35 }} />
+        <AddReactionIcon
+          style={{
+            color: "#092435",
+            fontSize: 35,
+            position: "relative",
+            top: "6px",
+          }}
+        />
         {"  "}
         Crear cuenta de usuario
       </Title>
@@ -153,6 +156,9 @@ const Register = () => {
             noValidate
             style={{ paddingBottom: "30px" }}
           >
+            <AnnounTitle>
+              Registrar los campos y crear un nuevo perfil de usuario
+            </AnnounTitle>
             <Grid
               container
               direction="row"
@@ -167,73 +173,50 @@ const Register = () => {
             >
               <Grid item lg={3} sm={3} xs={12}>
                 {" "}
-                <Controller
-                  name="name"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      variant="outlined"
-                      label="Nombres"
-                      style={{ textTransform: "upercase" }}
-                      className={classes.textField}
-                      {...register("name", {
-                        required: true,
-                        pattern: {
-                          value: /^[A-Za-z@.]+$/,
-                          message: "No puede contener números",
-                        },
-                      })}
-                      helperText={errors.name?.message}
-                    />
-                  )}
+                <TextField
+                  variant="outlined"
+                  label="Nombres"
+                  style={{ textTransform: "upercase" }}
+                  className={classes.textField}
+                  {...register("name", {
+                    required: true,
+                    pattern: {
+                      value: /^[A-Za-z@.]+$/,
+                      message: "No puede contener números",
+                    },
+                  })}
+                  helperText={errors.name?.message}
                 />
               </Grid>
               <Grid item lg={3} sm={3} xs={12}>
-                <Controller
-                  name="lastName"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      //  {...field}
-                      variant="outlined"
-                      label="Apellidos"
-                      style={{ textTransform: "upercase" }}
-                      className={classes.textField}
-                      // helperText={errors.name?.message}
-                      {...register("lastName", {
-                        required: true,
-                        pattern: {
-                          value: /^[A-Za-z@.]+$/,
-                          message: "No puede contener números",
-                        },
-                      })}
-                    />
-                  )}
+                <TextField
+                  variant="outlined"
+                  label="Apellidos"
+                  style={{ textTransform: "upercase" }}
+                  className={classes.textField}
+                  {...register("lastName", {
+                    required: true,
+                    pattern: {
+                      value: /^[A-Za-z@.]+$/,
+                      message: "No puede contener números",
+                    },
+                  })}
                 />
               </Grid>
               <Grid item lg={3} sm={3} xs={12}>
-                <Controller
-                  name="email"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      //{...field}
-                      variant="outlined"
-                      label="Correo electrónico"
-                      style={{ textTransform: "upercase" }}
-                      className={classes.textField}
-                      {...register("email", {
-                        required: true,
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Email no valido",
-                        },
-                      })}
-                    />
-                  )}
+                <TextField
+                  //{...field}
+                  variant="outlined"
+                  label="Correo electrónico"
+                  style={{ textTransform: "upercase" }}
+                  className={classes.textField}
+                  {...register("email", {
+                    required: true,
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Email no valido",
+                    },
+                  })}
                 />
               </Grid>
             </Grid>
@@ -254,76 +237,36 @@ const Register = () => {
               }}
             >
               <Grid item lg={3} sm={3} xs={12}>
-                <Controller
-                  name="password"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      //{...field}
-                      variant="outlined"
-                      label="Contraseña"
-                      style={{ textTransform: "upercase" }}
-                      className={classes.textField}
-                      {...register("password", { required: true })}
-                      type="password"
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item lg={3} sm={3} xs={12}>
-                {" "}
-                {/*<TextField
+                <TextField
+                  //{...field}
                   variant="outlined"
-                  label="Confirmación de contraseña"
+                  label="Contraseña"
+                  style={{ textTransform: "upercase" }}
                   className={classes.textField}
-                  {...register("password_confirmation", { required: true })}
+                  {...register("password", { required: true })}
                   type="password"
-                  //helperText={!!errors.name && "Campo requerido"}
-                  helperText={errors.password_confirmation?.message}
-               />*/}
-                <Controller
-                  name="password_comfirmation"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      //{...field}
-                      variant="outlined"
-                      label="Confirmar contraseña"
-                      style={{ textTransform: "upercase" }}
-                      className={classes.textField}
-                      {...register("password_confirmation", {
-                        required: true,
-                      })}
-                      type="password"
-                    />
-                  )}
                 />
               </Grid>
               <Grid item lg={3} sm={3} xs={12}>
-                {" "}
-                {/*<TextField
+                <TextField
+                  //{...field}
+                  variant="outlined"
+                  label="Confirmar contraseña"
+                  style={{ textTransform: "upercase" }}
+                  className={classes.textField}
+                  {...register("password_confirmation", {
+                    required: true,
+                  })}
+                  type="password"
+                />
+              </Grid>
+              <Grid item lg={3} sm={3} xs={12}>
+                <TextField
+                  //{...field}
                   variant="outlined"
                   label="Cédula"
                   className={classes.textField}
                   {...register("ci", { required: true, minLength: 10 })}
-                  //helperText={!!errors.name && "Campo requerido"}
-                  helperText={errors.ci?.message}
-                />*/}
-                <Controller
-                  name="ci"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      //{...field}
-                      variant="outlined"
-                      label="Cédula"
-                      className={classes.textField}
-                      {...register("ci", { required: true, minLength: 10 })}
-                    />
-                  )}
                 />
               </Grid>
             </Grid>
@@ -343,89 +286,62 @@ const Register = () => {
                 color: "#092435",
               }}
             >
+              <AnnounTitle>Seleccionar tipo y estado de la cuenta</AnnounTitle>
               <Grid item lg={3} sm={3} xs={12}>
-                <Controller
-                  name="availableStatus"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <FormControl
-                      variant="outlined"
-                      label="Estado"
-                      className={classes.textField}
-                      //style={{ minWidth: "auto" }}
-                    >
-                      <Select
-                        labelId="availableStatus"
-                        id="availableStatus"
-                        {...register("availableStatus", { required: true })}
-                        defaultValue="1"
-                      >
-                        <MenuItem value={`1`}>ACTIVO</MenuItem>
-                        <MenuItem value={`0`}>DESACTIVADO</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                />
+                <FormControl
+                  variant="outlined"
+                  label="Estado"
+                  className={classes.textField}
+                  //style={{ minWidth: "auto" }}
+                >
+                  <Select
+                    id="availableStatus"
+                    {...register("availableStatus", { required: true })}
+                    defaultValue="Activo"
+                  >
+                    <MenuItem value={`1`}>Activo</MenuItem>
+                    <MenuItem value={`0`}>Desactivado</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item lg={3} sm={3} xs={12}>
-                <Controller
-                  name="roleUser"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <FormControl
-                      variant="outlined"
-                      label="Tipo"
-                      className={classes.textField}
-                      //style={{ minWidth: "auto" }}
-                    >
-                      <Select
-                        labelId="roleUser"
-                        id="roleUser"
-                        //label="Tipo de usuario"
-                        {...register("roleUser", { required: true })}
-                        defaultValue="ROLE_ASSISTENT"
-                      >
-                        <MenuItem value={`ROLE_ADMIN`}>ADMINISTRADOR</MenuItem>
-                        <MenuItem value={`ROLE_MEDIC`}>MEDICO</MenuItem>
-                        <MenuItem value={`ROLE_ASSISTENT`}>ASISTENTE</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                />
+                <FormControl
+                  variant="outlined"
+                  label="Tipo"
+                  className={classes.textField}
+                >
+                  <Select
+                    id="roleUser"
+                    {...register("roleUser", { required: true })}
+                    defaultValue="Médico"
+                  >
+                    <MenuItem value={`ROLE_ADMIN`}>Administrador</MenuItem>
+                    <MenuItem value={`ROLE_MEDIC`}>Médico</MenuItem>
+                    <MenuItem value={`ROLE_ASSISTENT`}>Asistente</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item lg={3} sm={3} xs={12}>
-                <Controller
-                  name="employment"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <FormControl
-                      variant="outlined"
-                      label="ESpecialidad"
-                      className={classes.textField}
-                      // style={{ minWidth: "auto" }}
-                    >
-                      <Select
-                        //{...field}
-
-                        id="employment"
-                        labelID="Especialidad"
-                        {...register("employment", { required: true })}
-                        defaultValue="ASISTENTE MÉDICO"
-                      >
-                        <MenuItem value={"MEDICINA GENERAL"}>
-                          MEDICINA GENERAL
-                        </MenuItem>
-                        <MenuItem value={"ASISTENTE MÉDICO"}>
-                          ASISTENTE MEDICO
-                        </MenuItem>
-                        <MenuItem value={"ENFERMERIA"}>ENFERMERIA</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                />
+                <FormControl
+                  variant="outlined"
+                  label="ESpecialidad"
+                  className={classes.textField}
+                  //style={{ minWidth: "150px" }}
+                >
+                  <Select
+                    id="employment"
+                    {...register("employment", { required: true })}
+                    defaultValue=""
+                  >
+                    <MenuItem value={"MEDICINA GENERAL"}>
+                      Medicina General
+                    </MenuItem>
+                    <MenuItem value={"ASISTENTE MÉDICO"}>
+                      Asistente Médico
+                    </MenuItem>
+                    <MenuItem value={"ENFERMERIA"}>Enfermeria</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Divider
@@ -455,17 +371,18 @@ const Register = () => {
                   justifyContent: "center",
                 }}
               >
-                {" "}
-                <Button
-                  style={{
-                    backgroundColor: "#003D59",
-                    color: "#BBF0E8",
-                  }}
-                  variant="contained"
-                  fullWidth
-                >
-                  Cancelar
-                </Button>
+                <Link href={`${Routes.HOME}`}>
+                  <Button
+                    style={{
+                      backgroundColor: "#003D59",
+                      color: "#BBF0E8",
+                    }}
+                    variant="contained"
+                    fullWidth
+                  >
+                    Cancelar
+                  </Button>
+                </Link>
               </Grid>
 
               <Grid

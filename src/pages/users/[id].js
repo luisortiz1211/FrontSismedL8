@@ -1,29 +1,32 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useRouter } from "next/router";
-import Title from "@/components/Title";
-import LayoutSecondary from "@/components/LayoutSecondary";
-import { Container } from "@material-ui/core";
-import { fetcher } from "@/lib/utils";
-import useSWR from "swr";
-import Loading from "@/components/Loading";
-import { Users } from "@/lib/user";
-import { useForm, Controller } from "react-hook-form";
-import { TextField } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
-import { Button } from "@material-ui/core";
-import Link from "next/link";
-import { Link as Muilink } from "@material-ui/core/Link";
-import Routes from "@/constants/routes";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import Paper from "@material-ui/core/Paper";
+import AnnounTitle from "@/components/AnnounTitle";
 import ChargeInformation from "@/components/ChargeInformation";
-import { FormControl, Select, MenuItem } from "@material-ui/core";
+import LayoutSecondary from "@/components/LayoutSecondary";
+import Loading from "@/components/Loading";
+import Title from "@/components/Title";
+import Routes from "@/constants/routes";
+import { Users } from "@/lib/user";
+import { fetcher } from "@/lib/utils";
+import {
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+} from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Divider from "@material-ui/core/Divider";
+import Fade from "@material-ui/core/Fade";
+import Modal from "@material-ui/core/Modal";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -128,11 +131,21 @@ const userDetails = () => {
     <LayoutSecondary>
       <Container maxWidth="lg">
         <Title>
-          <HowToRegIcon style={{ color: "#092435", fontSize: 35 }} />
+          <HowToRegIcon
+            style={{
+              color: "#092435",
+              fontSize: 35,
+              position: "relative",
+              top: "6px",
+            }}
+          />
           Información de Usuario
         </Title>
         <Paper elevation={6} style={{ padding: "10px", margin: "20px" }}>
           <Container>
+            <AnnounTitle>
+              Actualice el estado del usuario Activado/Desactivado
+            </AnnounTitle>
             <form
               className={classes.root}
               noValidate
@@ -144,6 +157,7 @@ const userDetails = () => {
                 direction="row"
                 justifyContent="space-around"
                 alignItems="center"
+                spacing={2}
                 style={{
                   backgroundColor: "#BBF0E8",
                   paddingBottom: "10px",
@@ -201,6 +215,7 @@ const userDetails = () => {
                 direction="row"
                 justifyContent="space-around"
                 alignItems="center"
+                spacing={2}
                 style={{
                   backgroundColor: "#FFFFFF",
                   paddingBottom: "10px",
@@ -234,7 +249,7 @@ const userDetails = () => {
                       id="availableStatus"
                       label="Estado"
                       name="availableStatus"
-                      variant="outlined"
+                      fullWidth
                       {...register("availableStatus", { required: true })}
                       defaultValue={data.availableStatus}
                     >
@@ -275,6 +290,7 @@ const userDetails = () => {
                 direction="row"
                 justifyContent="space-around"
                 alignItems="center"
+                spacing={2}
                 style={{
                   backgroundColor: "#BBF0E8",
                   paddingBottom: "10px",
@@ -341,18 +357,19 @@ const userDetails = () => {
               >
                 <Grid
                   item
-                  lg={3}
-                  sm={4}
-                  xs={6}
+                  lg={4}
+                  md={6}
+                  xs={12}
                   style={{
                     padding: "10px",
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <Link href={`${Routes.HOME}`}>
                     <Button
-                      size="large"
+                      fullWidth
                       style={{
                         backgroundColor: "#003D59",
                         color: "#BBF0E8",
@@ -366,19 +383,20 @@ const userDetails = () => {
 
                 <Grid
                   item
-                  lg={3}
-                  sm={4}
-                  xs={6}
+                  lg={4}
+                  md={6}
+                  xs={12}
                   style={{
                     padding: "10px",
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <Button
                     variant="contained"
                     type="submit"
-                    size="large"
+                    fullWidth
                     style={{ backgroundColor: "#60CCD9", color: "#092435" }}
                     onClick={handleOpen}
                   >
@@ -409,7 +427,7 @@ const userDetails = () => {
                         "  " +
                         data.lastName +
                         "  " +
-                        "modificado con exito"}
+                        "modificado con éxito"}
                     </h2>
                     <Link href={`${Routes.USERS}`}>
                       <Button

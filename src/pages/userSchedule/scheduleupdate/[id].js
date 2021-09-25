@@ -1,51 +1,32 @@
-import useSWR from "swr";
-import { fetcher } from "@/lib/utils";
-import Link from "next/link";
-import Loading from "@/components/Loading";
-import { useRouter } from "next/router";
-
-import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
-
-import React, { useState } from "react";
-import Title from "@/components/Title";
-import LayoutSecondary from "@/components/LayoutSecondary";
-import { CssBaseline, Link as Muilink } from "@material-ui/core";
-
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import { Button, TextField, Box } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import Image from "next/image";
-import withAuth from "@/hocs/withAuth";
-import BorderColorIcon from "@material-ui/icons/BorderColor";
+import AnnounTitle from "@/components/AnnounTitle";
 import ChargeInformation from "@/components/ChargeInformation";
-import AddIcon from "@material-ui/icons/Add";
-import { ScheduleUser } from "@/lib/scheduleuser";
-import { useForm } from "react-hook-form";
-import { Fade, Modal, Backdrop } from "@material-ui/core";
+import LayoutSecondary from "@/components/LayoutSecondary";
+import Loading from "@/components/Loading";
+import Title from "@/components/Title";
 import Routes from "@/constants/routes";
+import { Scheduleusers } from "@/lib/scheduleuser";
+import { fetcher } from "@/lib/utils";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CssBaseline,
+  Fade,
+  Grid,
+  Modal,
+  TextField,
+} from "@material-ui/core";
+import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import TimePicker from "@mui/lab/TimePicker";
-import DeleteSchedule from "@/components/DeleteSchedule";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -115,6 +96,7 @@ const index = ({ props }) => {
   const router = useRouter();
   const { id } = router.query;
   const [open, setOpen] = useState(false);
+  const [opendel, setDel] = useState(false);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -127,7 +109,7 @@ const index = ({ props }) => {
 
   const onSubmit = async (schedule) => {
     try {
-      await ScheduleUser.update(`${id}`, {
+      await Scheduleusers.update(`${id}`, {
         startTime: schedule.startTime,
         finishTime: schedule.finishTime,
       });
@@ -143,8 +125,9 @@ const index = ({ props }) => {
     }
   };
   const handleDelete = async () => {
+    setDel(true);
     try {
-      await ScheduleUser.deleteUser(`${id}`);
+      await Scheduleusers.deleteSchedule(`${id}`);
     } catch (error) {
       if (error.response) {
         alert(error.response.message);
@@ -177,7 +160,17 @@ const index = ({ props }) => {
     <LayoutSecondary>
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
-        <Title>Modificar horario</Title>
+        <Title>
+          <UploadFileIcon
+            style={{
+              color: "#092435",
+              fontSize: 35,
+              position: "relative",
+              top: "6px",
+            }}
+          />
+          Modificar horario
+        </Title>
         <Paper
           className={classes.root}
           elevation={6}
@@ -212,6 +205,9 @@ const index = ({ props }) => {
                   autoComplete="off"
                   onSubmit={handleSubmit(onSubmit)}
                 >
+                  <AnnounTitle>
+                    Realice cambios en la hora o elimine el horario
+                  </AnnounTitle>
                   <Grid
                     container
                     direction="row"
@@ -259,7 +255,10 @@ const index = ({ props }) => {
                         {...register("finishTime")}
                       />
                     </Grid>
-
+                    <Divider
+                      light
+                      style={{ backgroundColor: "#60CCD9", color: "#092435" }}
+                    />
                     <Grid
                       container
                       direction="row"
@@ -283,17 +282,16 @@ const index = ({ props }) => {
                           justifyContent: "center",
                         }}
                       >
-                        <Link href={`${Routes.SCHEDULEUSER}/${data.user_id}`}>
+                        <Link href={`/userSchedule/${data.user_id}`}>
                           <Button
                             style={{
-                              backgroundColor: "#61908A",
-                              color: "#092435",
+                              backgroundColor: "#003D59",
+                              color: "#BBF0E8",
                             }}
                             variant="contained"
                             fullWidth
-                            onClick={handleDelete}
                           >
-                            Eliminar
+                            Cancelar
                           </Button>
                         </Link>
                       </Grid>
@@ -311,13 +309,14 @@ const index = ({ props }) => {
                         <Link href={`${Routes.SCHEDULEUSER}/${data.user_id}`}>
                           <Button
                             style={{
-                              backgroundColor: "#003D59",
-                              color: "#BBF0E8",
+                              backgroundColor: "#BBF0E8",
+                              color: "#092435",
                             }}
                             variant="contained"
                             fullWidth
+                            onClick={handleDelete}
                           >
-                            Cancelar
+                            Eliminar
                           </Button>
                         </Link>
                       </Grid>
@@ -352,17 +351,17 @@ const index = ({ props }) => {
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
                     className={classes.modal}
-                    open={open}
+                    open={(open, opendel)}
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                     BackdropProps={{
                       timeout: 500,
                     }}
                   >
-                    <Fade in={open}>
+                    <Fade in={(open, opendel)}>
                       <div className={classes.mpaper}>
                         <h2 id="transition-modal-title">
-                          Datos actualizados con exito
+                          Cambios realizados con éxito
                         </h2>
                         <Link href={`${Routes.SCHEDULEUSER}/${data.user_id}`}>
                           <Button

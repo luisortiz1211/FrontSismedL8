@@ -1,54 +1,32 @@
-import useSWR from "swr";
-import { fetcher } from "@/lib/utils";
-import Link from "next/link";
-import Loading from "@/components/Loading";
-import { useRouter } from "next/router";
-
-import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
-
-import React, { useState } from "react";
-import Title from "@/components/Title";
-import LayoutSecondary from "@/components/LayoutSecondary";
-import { CssBaseline, Link as Muilink } from "@material-ui/core";
-
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import { Button, TextField, Box } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import Image from "next/image";
-import withAuth from "@/hocs/withAuth";
-import BorderColorIcon from "@material-ui/icons/BorderColor";
+import AnnounTitle from "@/components/AnnounTitle";
 import ChargeInformation from "@/components/ChargeInformation";
-import AddIcon from "@material-ui/icons/Add";
-import { ScheduleUser } from "@/lib/scheduleuser";
-import { useForm } from "react-hook-form";
-import { Fade, Modal, Backdrop, Controller } from "@material-ui/core";
+import LayoutSecondary from "@/components/LayoutSecondary";
+import Loading from "@/components/Loading";
+import Title from "@/components/Title";
 import Routes from "@/constants/routes";
+import { Scheduleusers } from "@/lib/scheduleuser";
+import { fetcher } from "@/lib/utils";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CssBaseline,
+  Fade,
+  Grid,
+  Modal,
+  TextField,
+} from "@material-ui/core";
+import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import TimePicker from "@mui/lab/TimePicker";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import NativeSelect from "@material-ui/core/NativeSelect";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,7 +103,7 @@ const index = ({ props }) => {
 
   const onSubmit = async (schedule) => {
     try {
-      await ScheduleUser.create(`${id}`, {
+      await Scheduleusers.create(`${id}`, {
         user_id: id,
         userDay: schedule.userDay,
         startTime: schedule.startTime,
@@ -163,7 +141,17 @@ const index = ({ props }) => {
       <LayoutSecondary>
         <CssBaseline />
         <Container maxWidth="lg" direction="row">
-          <Title>Nuevo horario</Title>
+          <Title>
+            <CreditScoreIcon
+              style={{
+                color: "#092435",
+                fontSize: 35,
+                position: "relative",
+                top: "6px",
+              }}
+            />
+            Nuevo horario
+          </Title>
           <Paper
             className={classes.root}
             elevation={6}
@@ -192,6 +180,8 @@ const index = ({ props }) => {
 
               <Grid item xs={12} md={8} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
+                  <AnnounTitle>Agregue el día y la hora de turno</AnnounTitle>
+
                   <form
                     className={classes.root}
                     noValidate
@@ -266,16 +256,18 @@ const index = ({ props }) => {
                             justifyContent: "center",
                           }}
                         >
-                          <Button
-                            style={{
-                              backgroundColor: "#003D59",
-                              color: "#BBF0E8",
-                            }}
-                            variant="contained"
-                            fullWidth
-                          >
-                            Cancelar
-                          </Button>
+                          <Link href={`${Routes.SCHEDULEUSER}/${id}`}>
+                            <Button
+                              style={{
+                                backgroundColor: "#003D59",
+                                color: "#BBF0E8",
+                              }}
+                              variant="contained"
+                              fullWidth
+                            >
+                              Cancelar
+                            </Button>
+                          </Link>
                         </Grid>
                         <Grid
                           item
@@ -321,7 +313,7 @@ const index = ({ props }) => {
                       <Fade in={open}>
                         <div className={classes.mpaper}>
                           <h2 id="transition-modal-title">
-                            Se añadio un nuevo horario con exito
+                            Se añadio un nuevo horario con éxito
                           </h2>
                           <Link href={`${Routes.SCHEDULEUSER}/${id}`}>
                             <Button

@@ -1,20 +1,18 @@
-import React from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/utils";
-import Link from "next/link";
 import Loading from "@/components/Loading";
-
+import { fetcher } from "@/lib/utils";
+import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
+import { makeStyles } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
+import React from "react";
+import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ExplorationPatients({ patientID }) {
+export default function FamilyHistories({ patientID }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -40,12 +38,11 @@ export default function ExplorationPatients({ patientID }) {
   };
 
   const { data, error } = useSWR(
-    `/patients/${patientID}/exploration_patients`,
+    `/patients/${patientID}/family_histories`,
     fetcher
   );
   //console.log("emergencyContacts", data);
-  if (error)
-    return <div> No se puede mostrar las exploraciones del paciente</div>;
+  if (error) return <div> No se puede mostrar los antecedentes famliares</div>;
   if (!data) return <Loading />;
   // render data
   return (
@@ -59,21 +56,24 @@ export default function ExplorationPatients({ patientID }) {
           <ListItemIcon>
             <PermContactCalendarIcon />
           </ListItemIcon>
-          <ListItemText primary="Exploraciones del paciente" />
+          <ListItemText primary="Antecedentes familiares" />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {data.data.map((exploration) => {
+            {data.data.map((familyHistories) => {
               return (
-                <ListItem button className={classes.nested}  key={exploration.id}>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  key={familyHistories.id}
+                >
                   <ListItemIcon>
                     <NavigateNextIcon />
                   </ListItemIcon>
-                  <ListItemText primary={exploration.diagnosisExplo} />
-                  <ListItemText primary={exploration.created_at} />
-                  <ListItemText primary={exploration.user_id} />
-                  <ListItemText primary={exploration.treatmentExplo} />
+                  <ListItemText primary={familyHistories.nameCondition} />
+                  <ListItemText primary={familyHistories.yearCondition} />
+                  <ListItemText primary={familyHistories.commentCondition} />
                 </ListItem>
               );
             })}

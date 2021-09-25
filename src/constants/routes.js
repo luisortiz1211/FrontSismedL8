@@ -19,7 +19,8 @@ const privateRoutes = {
   DRUGS: "/drugsRecipie",
   USERS: "/users",
   SCHEDULEDAY: "/scheduleDay",
-  SCHEDULEUSER: `/userSchedule`,
+  SCHEDULEUSER: "/userSchedule",
+  MEDICALHISTORY: "/medicalHistory",
 
   // PATIENT_ID: "/patient/:id",
 
