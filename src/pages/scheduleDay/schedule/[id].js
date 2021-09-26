@@ -4,7 +4,6 @@ import LayoutSecondary from "@/components/LayoutSecondary";
 import Loading from "@/components/Loading";
 import Title from "@/components/Title";
 import Routes from "@/constants/routes";
-import { Scheduleusers } from "@/lib/scheduleuser";
 import { fetcher } from "@/lib/utils";
 import {
   Backdrop,
@@ -17,16 +16,17 @@ import {
   TextField,
 } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import { Scheduledays } from "@/lib/scheduleday";
+import { Scheduleusers } from "@/lib/scheduleuser";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,18 +101,20 @@ const index = ({ props }) => {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
-  const [value, setValue] = useState();
 
   const handleOpen = () => {
     setOpen(true);
   };
 
+  // actualizar tabla en schedule_days se dirige a resgitrar historia
   const onSubmit = async (schedule) => {
     try {
-      await Scheduleusers.update(`${id}`, {
-        startTime: schedule.startTime,
-        finishTime: schedule.finishTime,
-        availableStatus: 1,
+      await Scheduledays.update(`${id}`, {
+        scheduleDay: schedule.scheduleDay,
+        scheduleTime: schedule.scheduleTime,
+        userAssigned: schedule.userAssigned,
+        scheduleDayState: "registrado",
+        patient_id: schedule.patient_id,
       });
     } catch (error) {
       if (error.response) {
@@ -125,10 +127,28 @@ const index = ({ props }) => {
       console.error(error.config);
     }
   };
-  const handleDelete = async () => {
-    setDel(true);
+  // cancelar cita en la tabla schedule_days
+  const handleCancelDay = async () => {
     try {
-      await Scheduleusers.deleteSchedule(`${id}`);
+      await Scheduledays.update(`${id}`, { scheduleDayState: "cancelado" });
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.message);
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    }
+  };
+  // cancelar horario en schedule_user
+  const handleCancelUser = async () => {
+    try {
+      await Scheduleusers.update(`${user_id}`, {
+        availableStatus: "cancelado",
+      });
     } catch (error) {
       if (error.response) {
         alert(error.response.message);
@@ -142,8 +162,8 @@ const index = ({ props }) => {
     }
   };
 
-  const { data, error } = useSWR(`/schedule_users/${id}`, fetcher);
-  console.log("horarios por usuario", data);
+  const { data, error } = useSWR(`/schedule_days/${id}`, fetcher);
+  console.log("horario de agenda", data);
   if (error)
     return (
       <div>
@@ -162,7 +182,7 @@ const index = ({ props }) => {
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
         <Title>
-          <UploadFileIcon
+          <ChangeCircleIcon
             style={{
               color: "#092435",
               fontSize: 35,
@@ -170,7 +190,7 @@ const index = ({ props }) => {
               top: "6px",
             }}
           />
-          Modificar horario
+          Registrar/Cancelar cita
         </Title>
         <Paper
           className={classes.root}
@@ -207,59 +227,79 @@ const index = ({ props }) => {
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <AnnounTitle>
-                    Realice cambios en la hora o elimine el horario
+                    Seleccione Atender para continuar con la atención.
                   </AnnounTitle>
                   <Grid
                     container
                     direction="row"
                     justifyContent="space-around"
                     alignItems="center"
+                    spacing={1}
                     style={{
                       paddingBottom: "15px",
                       paddingTop: "20px",
                       color: "#092435",
                     }}
                   >
-                    <Grid item md={4} sm={3} xs={12}>
+                    <Grid item md={2} sm={2} xs={12}>
                       <TextField
-                        id="userDay"
-                        name="userDay"
+                        id="scheduleDay"
+                        name="scheduleDay"
                         label="Día"
-                        defaultValue={data.userDay}
+                        defaultValue={data.scheduleDay}
                         className={classes.textField}
                         variant="outlined"
-                        //{...register("ci")}
+                        {...register("scheduleDay")}
                         InputProps={{
                           readOnly: true,
                         }}
                       />
                     </Grid>
-                    <Grid item md={4} sm={3} xs={12}>
+                    <Grid item md={3} sm={3} xs={12}>
                       <TextField
-                        id="startTime"
-                        name="startTime"
-                        label="Hora inicio"
-                        defaultValue={data.startTime}
+                        id="scheduleTime"
+                        name="scheduleTime"
+                        label="Inicio turno"
+                        defaultValue={data.scheduleTime}
                         className={classes.textField}
                         variant="outlined"
-                        {...register("startTime")}
+                        {...register("scheduleTime")}
                       />
                     </Grid>
-                    <Grid item md={4} sm={3} xs={12}>
+                    <Grid item md={2} sm={2} xs={12}>
                       <TextField
-                        id="finishTime"
-                        name="finishTime"
-                        label="Hora final"
-                        defaultValue={data.finishTime}
+                        id="userAssigned"
+                        name="userAssigned"
+                        label="ID Médico"
+                        defaultValue={data.userAssigned}
                         className={classes.textField}
                         variant="outlined"
-                        {...register("finishTime")}
+                        {...register("userAssigned")}
                       />
                     </Grid>
-                    <Divider
-                      light
-                      style={{ backgroundColor: "#60CCD9", color: "#092435" }}
-                    />
+                    <Grid item md={3} sm={3} xs={12}>
+                      <TextField
+                        id="scheduleDayState"
+                        name="scheduleDayState"
+                        label="Estado"
+                        defaultValue={data.scheduleDayState}
+                        className={classes.textField}
+                        variant="outlined"
+                        //{...register("scheduleDayState")}
+                      />
+                    </Grid>
+                    <Grid item md={2} sm={2} xs={12}>
+                      <TextField
+                        id="patient_id"
+                        name="patient_id"
+                        label="# Historia clínica"
+                        defaultValue={data.patient_id}
+                        className={classes.textField}
+                        variant="outlined"
+                        {...register("patient_id")}
+                      />
+                    </Grid>
+
                     <Grid
                       container
                       direction="row"
@@ -274,7 +314,8 @@ const index = ({ props }) => {
                     >
                       <Grid
                         item
-                        md={3}
+                        md={4}
+                        sm={4}
                         xs={12}
                         style={{
                           padding: "10px",
@@ -283,68 +324,77 @@ const index = ({ props }) => {
                           justifyContent: "center",
                         }}
                       >
-                        <Link href={`/userSchedule/${data.user_id}`}>
+                        <Link href={`/scheduleDay/schedule/`}>
                           <Button
                             style={{
-                              backgroundColor: "#003D59",
-                              color: "#BBF0E8",
-                            }}
-                            variant="contained"
-                            fullWidth
-                          >
-                            Cancelar
-                          </Button>
-                        </Link>
-                      </Grid>
-                      <Grid
-                        item
-                        md={3}
-                        xs={12}
-                        style={{
-                          padding: "10px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Link href={`${Routes.SCHEDULEUSER}/${data.user_id}`}>
-                          <Button
-                            style={{
-                              backgroundColor: "#BBF0E8",
+                              backgroundColor: "#61908A",
                               color: "#092435",
                             }}
                             variant="contained"
                             fullWidth
-                            onClick={handleDelete}
                           >
-                            Eliminar
+                            Regresar
                           </Button>
                         </Link>
                       </Grid>
-                      <Grid
-                        item
-                        md={3}
-                        xs={12}
-                        style={{
-                          padding: "10px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          type="submit"
-                          fullWidth
-                          style={{
-                            backgroundColor: "#60CCD9",
-                            color: "#092435",
-                          }}
-                          onClick={handleOpen}
-                        >
-                          Actualizar
-                        </Button>
-                      </Grid>
+                      {data.scheduleDayState !== "cancelado" ? (
+                        <>
+                          {" "}
+                          <Grid
+                            item
+                            md={4}
+                            sm={4}
+                            xs={12}
+                            style={{
+                              padding: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Link href={`/scheduleDay/schedule/`}>
+                              <Button
+                                style={{
+                                  backgroundColor: "#003D59",
+                                  color: "#BBF0E8",
+                                }}
+                                variant="contained"
+                                fullWidth
+                                onClick={handleCancelDay}
+                              >
+                                Cancelar cita
+                              </Button>
+                            </Link>
+                          </Grid>
+                          <Grid
+                            item
+                            md={4}
+                            sm={4}
+                            xs={12}
+                            style={{
+                              padding: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Button
+                              variant="contained"
+                              type="submit"
+                              fullWidth
+                              style={{
+                                backgroundColor: "#60CCD9",
+                                color: "#092435",
+                              }}
+                              onClick={handleOpen}
+                            >
+                              Examinar
+                            </Button>
+                          </Grid>
+                        </>
+                      ) : (
+                        "Cita cancelada agendar nuevamente"
+                      )}
                     </Grid>
                   </Grid>
 

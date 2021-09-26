@@ -25,11 +25,12 @@ import useSWR from "swr";
 
 const columns = [
   {
-    id: "id",
+    id: "schedule_id",
     label: "N°",
     minWidth: 30,
     backgroundColor: "#BBF0E8",
     align: "left",
+    fontSize: "16px",
   },
   {
     id: "userDay",
@@ -37,6 +38,7 @@ const columns = [
     minWidth: 130,
     backgroundColor: "#BBF0E8",
     align: "left",
+    fontSize: "16px",
   },
   {
     id: "startTime",
@@ -44,6 +46,7 @@ const columns = [
     minWidth: 130,
     backgroundColor: "#BBF0E8",
     align: "left",
+    fontSize: "16px",
   },
   {
     id: "finishTime",
@@ -51,6 +54,7 @@ const columns = [
     minWidth: 130,
     backgroundColor: "#BBF0E8",
     align: "left",
+    fontSize: "16px",
   },
 
   {
@@ -59,6 +63,7 @@ const columns = [
     minWidth: 50,
     backgroundColor: "#BBF0E8",
     align: "left",
+    fontSize: "16px",
   },
 ];
 
@@ -187,7 +192,7 @@ const index = () => {
                       style={{
                         minWidth: column.minWidth,
                         backgroundColor: column.backgroundColor,
-                        fontWeight: 400,
+                        fontSize: column.fontSize,
                       }}
                     >
                       {column.label}
@@ -247,7 +252,7 @@ const index = () => {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               {column.id && typeof value === "number"
-                                ? column.id(value)
+                                ? value
                                 : value}{" "}
                               {column.id === "botonSelect" &&
                               column.label == "" ? (

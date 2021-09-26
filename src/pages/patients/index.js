@@ -147,9 +147,9 @@ const index = () => {
           <PeopleOutlineIcon
             style={{
               color: "#092435",
-              fontSize: 35,
+              fontSize: 40,
               position: "relative",
-              top: "6px",
+              top: "7px",
             }}
           />{" "}
           {"  "} Historial de pacientes
@@ -160,7 +160,7 @@ const index = () => {
           sx={{ width: "100%", overflow: "hidden" }}
         >
           <AnnounTitle>
-            Buscar si el paciente existe en la base y agendar
+            Buscar si el paciente existe en la base de datos antes de agendar
           </AnnounTitle>
 
           <TableContainer className={classes.container}>

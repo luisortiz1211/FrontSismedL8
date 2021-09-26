@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import useSWR from "swr";
 import * as yup from "yup";
+import AnnounTitle from "@/components/AnnounTitle";
 
 const schema = yup.object().shape({
   /* ci: yup.number().required("Confirme su número de cédula"),
@@ -29,43 +30,51 @@ const schema = yup.object().shape({
 });
 const columns = [
   {
-    id: "schedule_id",
+    id: "id",
     label: "N°",
     minWidth: 30,
     backgroundColor: "#BBF0E8",
-    align: "left",
+    align: "center",
     fontSize: "16px",
   },
   {
-    id: "userDay",
+    id: "scheduleDay",
     label: "Día",
     minWidth: 100,
     backgroundColor: "#BBF0E8",
-    align: "left",
+    align: "center",
     fontSize: "16px",
   },
   {
-    id: "startTime",
+    id: "patient_id",
+    label: "# Historia clínica",
+    minWidth: 100,
+    backgroundColor: "#BBF0E8",
+    align: "center",
+    fontSize: "16px",
+  },
+  {
+    id: "scheduleTime",
     label: "Inicio turno",
     minWidth: 100,
     backgroundColor: "#BBF0E8",
-    align: "left",
+    align: "center",
     fontSize: "16px",
   },
   {
-    id: "finishTime",
-    label: "Fin turno",
+    id: "userAssigned",
+    label: "ID Médico",
     minWidth: 100,
     backgroundColor: "#BBF0E8",
-    align: "left",
+    align: "center",
     fontSize: "16px",
   },
   {
-    id: "availableStatus",
-    label: "Hora fin",
+    id: "scheduleDayState",
+    label: "Estado",
     minWidth: 100,
     backgroundColor: "#BBF0E8",
-    align: "left",
+    align: "center",
     fontSize: "16px",
   },
 
@@ -74,7 +83,7 @@ const columns = [
     label: "",
     minWidth: 50,
     backgroundColor: "#BBF0E8",
-    align: "left",
+    align: "center",
   },
 ];
 
@@ -155,8 +164,8 @@ const index = () => {
     setPage(0);
   };
 
-  const { data, error } = useSWR(`/users/${user_id}}/schedule_users`, fetcher);
-  console.log("Horarios médico", data);
+  const { data, error } = useSWR(`/schedule_days`, fetcher);
+  console.log("Horarios de agendamiento", data);
   if (error)
     return (
       <div>
@@ -173,7 +182,7 @@ const index = () => {
   return (
     <Layout>
       <CssBaseline />
-      <Container maxWidth="lg" direction="row">
+      <Container maxWidth="lg">
         <Title>
           {" "}
           <ListAltIcon
@@ -184,13 +193,15 @@ const index = () => {
               top: "7px",
             }}
           />{" "}
-          Horario de Citas
+          Pacientes Agendados
         </Title>
         <Paper
-          className={classes.root}
           elevation={6}
           style={{ margin: "20px" }}
+          sx={{ width: "100%", overflow: "hidden" }}
         >
+          <AnnounTitle>Registrar o cancelar agendamiento</AnnounTitle>
+
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -227,11 +238,6 @@ const index = () => {
                           const value = row[array.id];
                           return (
                             <TableCell key={array.id} align={array.align}>
-                              {array.id === "availableStatus"
-                                ? row.availableStatus === 0
-                                  ? "Disponible"
-                                  : "Asignado"
-                                : value}
                               {array.id === "botonSelect" &&
                               array.label == "" ? (
                                 <Grid
@@ -242,7 +248,8 @@ const index = () => {
                                 >
                                   <Grid item>
                                     <Link
-                                      href={`/patients/${id}/scheduleDay/${user_id}/schedule/${row.schedule_id}`}
+                                      href={`/scheduleDay/schedule/${row.id}`}
+                                      //href={`/users/${row.userAssigned}/scheduleUser/${row.id}`}
                                     >
                                       <Button
                                         variant="outlined"
@@ -251,14 +258,13 @@ const index = () => {
                                           background: "#60CCD9",
                                         }}
                                       >
-                                        <AssignmentTurnedInIcon />
-                                        Asignar
+                                        Continuar
                                       </Button>
                                     </Link>
                                   </Grid>
                                 </Grid>
                               ) : (
-                                ""
+                                value
                               )}
                             </TableCell>
                           );

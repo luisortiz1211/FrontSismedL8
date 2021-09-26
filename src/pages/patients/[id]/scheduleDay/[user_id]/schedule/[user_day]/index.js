@@ -3,24 +3,24 @@ import ChargeInformation from "@/components/ChargeInformation";
 import LayoutSecondary from "@/components/LayoutSecondary";
 import Loading from "@/components/Loading";
 import Title from "@/components/Title";
-import Routes from "@/constants/routes";
+import { Scheduledays } from "@/lib/scheduleday";
 import { Scheduleusers } from "@/lib/scheduleuser";
+
 import { fetcher } from "@/lib/utils";
 import {
   Backdrop,
   Box,
   Button,
   CssBaseline,
-  Fade,
   Grid,
   Modal,
   TextField,
+  Fade,
 } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -92,28 +92,34 @@ const useStyles = makeStyles((theme) => ({
 
 const index = ({ props }) => {
   const classes = useStyles();
-  const { register, handleSubmit } = useForm();
+  const { register, control, handleSubmit } = useForm();
   const router = useRouter();
-  const { id } = router.query;
-  const [open, setOpen] = useState(false);
-  const [opendel, setDel] = useState(false);
+  const { id, user_id, user_day } = router.query;
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-  const [value, setValue] = useState();
+  const [open, setOpen] = useState(false);
+
+  const [result, setResult] = useState("");
+  const [errorsList, setErrorsList] = useState([]);
+  const [userInfo, setUserInfo] = useState(null);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
-  const onSubmit = async (schedule) => {
+  const onSubmit = async (formData) => {
+    setUserInfo(null);
+    setResult("Sending data...");
     try {
-      await Scheduleusers.update(`${id}`, {
-        startTime: schedule.startTime,
-        finishTime: schedule.finishTime,
-        availableStatus: 1,
-      });
+      const userData = {
+        ...formData,
+        scheduleDayState: "pendiente",
+        patient_id: id,
+        userAssigned: user_id,
+      };
+      const response = await Scheduledays.create(userData);
+      console.log("Nueva cita registrada", response);
+      setResult("Date properly register");
+      //alert("Cita asignada ");
     } catch (error) {
       if (error.response) {
         console.error(error.response);
@@ -125,10 +131,12 @@ const index = ({ props }) => {
       console.error(error.config);
     }
   };
-  const handleDelete = async () => {
-    setDel(true);
+  const handleSchedule = async (schedule_day) => {
+    setOpen(true);
     try {
-      await Scheduleusers.deleteSchedule(`${id}`);
+      await Scheduleusers.update(`${user_day}`, {
+        availableStatus: 1,
+      });
     } catch (error) {
       if (error.response) {
         alert(error.response.message);
@@ -142,8 +150,8 @@ const index = ({ props }) => {
     }
   };
 
-  const { data, error } = useSWR(`/schedule_users/${id}`, fetcher);
-  console.log("horarios por usuario", data);
+  const { data, error } = useSWR(`/schedule_users/${user_day}`, fetcher);
+  console.log("horario para agendar", data);
   if (error)
     return (
       <div>
@@ -162,7 +170,7 @@ const index = ({ props }) => {
       <CssBaseline />
       <Container maxWidth="lg" direction="row">
         <Title>
-          <UploadFileIcon
+          <PostAddIcon
             style={{
               color: "#092435",
               fontSize: 35,
@@ -170,7 +178,7 @@ const index = ({ props }) => {
               top: "6px",
             }}
           />
-          Modificar horario
+          Turno seleccionado
         </Title>
         <Paper
           className={classes.root}
@@ -207,59 +215,80 @@ const index = ({ props }) => {
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <AnnounTitle>
-                    Realice cambios en la hora o elimine el horario
+                    Verifique la hora antes de aceptar, para cancelar el turno
+                    diríjase a la sección Agenda pacientes
                   </AnnounTitle>
                   <Grid
                     container
                     direction="row"
                     justifyContent="space-around"
                     alignItems="center"
+                    spacing={1}
                     style={{
                       paddingBottom: "15px",
                       paddingTop: "20px",
                       color: "#092435",
                     }}
                   >
-                    <Grid item md={4} sm={3} xs={12}>
+                    <Grid item md={3} sm={6} xs={12}>
                       <TextField
-                        id="userDay"
-                        name="userDay"
+                        id="scheduleDay"
+                        name="scheduleDay"
                         label="Día"
                         defaultValue={data.userDay}
                         className={classes.textField}
                         variant="outlined"
-                        //{...register("ci")}
+                        /*   InputProps={{
+                          readOnly: true,
+                        }} */
+                        {...register("scheduleDay")}
+                      />
+                    </Grid>
+                    <Grid item md={3} sm={6} xs={12}>
+                      <TextField
+                        id="availableStatus"
+                        name="availableStatus"
+                        label="Estado"
+                        defaultValue={
+                          data.availableStatus === 0 ? "Disponible" : "Asignado"
+                        }
+                        className={classes.textField}
+                        variant="outlined"
+                        //{...register("availableStatus")}
                         InputProps={{
                           readOnly: true,
                         }}
                       />
                     </Grid>
-                    <Grid item md={4} sm={3} xs={12}>
+                    <Grid item md={3} sm={6} xs={12}>
                       <TextField
-                        id="startTime"
-                        name="startTime"
-                        label="Hora inicio"
+                        id="scheduleTime"
+                        name="scheduleTime"
+                        label="Inicio Turno"
                         defaultValue={data.startTime}
                         className={classes.textField}
                         variant="outlined"
-                        {...register("startTime")}
+                        /* InputProps={{
+                          readOnly: true,
+                        }} */
+                        {...register("scheduleTime")}
                       />
                     </Grid>
-                    <Grid item md={4} sm={3} xs={12}>
+                    <Grid item md={3} sm={6} xs={12}>
                       <TextField
                         id="finishTime"
                         name="finishTime"
-                        label="Hora final"
+                        label="Fin turno"
                         defaultValue={data.finishTime}
                         className={classes.textField}
                         variant="outlined"
-                        {...register("finishTime")}
+                        //{...register("finishTime")}
+                        InputProps={{
+                          readOnly: true,
+                        }}
                       />
                     </Grid>
-                    <Divider
-                      light
-                      style={{ backgroundColor: "#60CCD9", color: "#092435" }}
-                    />
+
                     <Grid
                       container
                       direction="row"
@@ -283,7 +312,11 @@ const index = ({ props }) => {
                           justifyContent: "center",
                         }}
                       >
-                        <Link href={`/userSchedule/${data.user_id}`}>
+                        <Link
+                          href={`/patients/${id}/scheduleDay/${user_id}/`}
+                          as={`/patients/${id}/scheduleDay/${user_id}/`}
+                          passHref
+                        >
                           <Button
                             style={{
                               backgroundColor: "#003D59",
@@ -296,7 +329,7 @@ const index = ({ props }) => {
                           </Button>
                         </Link>
                       </Grid>
-                      <Grid
+                      {/*   <Grid
                         item
                         md={3}
                         xs={12}
@@ -320,31 +353,36 @@ const index = ({ props }) => {
                             Eliminar
                           </Button>
                         </Link>
-                      </Grid>
-                      <Grid
-                        item
-                        md={3}
-                        xs={12}
-                        style={{
-                          padding: "10px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          type="submit"
-                          fullWidth
+                      </Grid> */}
+                      {data.availableStatus === 0 ? (
+                        <Grid
+                          item
+                          md={3}
+                          xs={12}
                           style={{
-                            backgroundColor: "#60CCD9",
-                            color: "#092435",
+                            padding: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
-                          onClick={handleOpen}
                         >
-                          Actualizar
-                        </Button>
-                      </Grid>
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            fullWidth
+                            style={{
+                              backgroundColor: "#60CCD9",
+                              color: "#092435",
+                            }}
+                            //onClick={handleSchedule}
+                            onClick={handleSchedule}
+                          >
+                            Agendar cita
+                          </Button>
+                        </Grid>
+                      ) : (
+                        "Cita no disponible, ingrese en la sección Agenda pacientes para cancelar"
+                      )}
                     </Grid>
                   </Grid>
 
@@ -352,19 +390,19 @@ const index = ({ props }) => {
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
                     className={classes.modal}
-                    open={(open, opendel)}
+                    open={open}
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                     BackdropProps={{
                       timeout: 500,
                     }}
                   >
-                    <Fade in={(open, opendel)}>
+                    <Fade in={open}>
                       <div className={classes.mpaper}>
                         <h2 id="transition-modal-title">
-                          Cambios realizados con éxito
+                          Cita asignada con éxito
                         </h2>
-                        <Link href={`${Routes.SCHEDULEUSER}/${data.user_id}`}>
+                        <Link href={`/patients/${id}/scheduleDay`}>
                           <Button
                             variant="contained"
                             type="submit"

@@ -27,10 +27,10 @@ const columns = [
   {
     id: "id",
     label: "N°",
-    minWidth: 10,
+    minWidth: 30,
     backgroundColor: "#BBF0E8",
     align: "left",
-    fontSize: "17px",
+    fontSize: "16px",
   },
   {
     id: "name",
@@ -38,7 +38,7 @@ const columns = [
     minWidth: 100,
     backgroundColor: "#BBF0E8",
     align: "left",
-    fontSize: "17px",
+    fontSize: "16px",
   },
   {
     id: "lastName",
@@ -46,7 +46,7 @@ const columns = [
     minWidth: 100,
     backgroundColor: "#BBF0E8",
     align: "left",
-    fontSize: "17px",
+    fontSize: "16px",
   },
   {
     id: "email",
@@ -62,7 +62,7 @@ const columns = [
     minWidth: 100,
     backgroundColor: "#BBF0E8",
     align: "left",
-    fontSize: "17px",
+    fontSize: "16px",
   },
   {
     id: "roleUser",
@@ -70,7 +70,7 @@ const columns = [
     minWidth: 100,
     backgroundColor: "#BBF0E8",
     align: "left",
-    fontSize: "17px",
+    fontSize: "16px",
   },
   {
     id: "botonSelect",
@@ -78,7 +78,7 @@ const columns = [
     minWidth: 100,
     backgroundColor: "#BBF0E8",
     align: "left",
-    fontSize: "17px",
+    fontSize: "16px",
   },
 ];
 const useStyles = makeStyles((theme) => ({
@@ -141,6 +141,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//mostrar lista de usuarios para agendamiento
 export default function ScheduleDayUser() {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -163,7 +164,7 @@ export default function ScheduleDayUser() {
   };
 
   const { data, error } = useSWR(`/users`, fetcher);
-  console.log("listas de medicos", data);
+  console.log("listas de medicos para agendamiento", data);
   if (error)
     return (
       <div>
@@ -229,17 +230,14 @@ export default function ScheduleDayUser() {
                             : value && array.id === "roleUser"
                             ? row.roleUser === "ROLE_MEDIC"
                               ? "Médico"
-                              : /* : row.roleUser === "ROLE_ASSISTENT"
-                                  ? "Asistente"
-                                  : row.roleUser === "ROLE_ADMIN"
-                                  ? "Administrador"*/
-                                "No asignado"
+                              : "No asignado"
                             : value}
 
                           {array.label == "" ? (
                             <Grid container direction="row" alignItems="center">
                               <Grid item>
                                 <Link
+                                  //direccionar para asignar un horario a un paciente
                                   href={`/patients/${id}/scheduleDay/${row.id}/`}
                                   as={`/patients/${id}/scheduleDay/${row.id}/`}
                                   passHref

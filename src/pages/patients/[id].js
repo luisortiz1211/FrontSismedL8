@@ -150,7 +150,9 @@ const patientDetails = ({ props }) => {
               autoComplete="off"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <AnnounTitle>Antes de agendar actualice los datos</AnnounTitle>
+              <AnnounTitle>
+                Antes de agendar actualice los datos, si es necesario
+              </AnnounTitle>
               <Grid
                 container
                 direction="row"
@@ -169,13 +171,14 @@ const patientDetails = ({ props }) => {
                   <TextField
                     id="ci"
                     name="ci"
-                    label="Cédula"
+                    label=" N° cédula"
+                    variant="outlined"
+                    disabled
                     defaultValue={data.ci}
                     className={classes.textField}
                     InputProps={{
                       readOnly: true,
                     }}
-                    variant="outlined"
                     //{...register("ci")}
                   />
                 </Grid>
@@ -230,6 +233,7 @@ const patientDetails = ({ props }) => {
                     required
                     className={classes.textField}
                     variant="outlined"
+                    disabled
                     InputProps={{
                       readOnly: true,
                     }}
@@ -241,6 +245,8 @@ const patientDetails = ({ props }) => {
                     id="civilStatus"
                     name="civilStatus"
                     label="Estado civil"
+                    variant="outlined"
+                    disabled
                     defaultValue={
                       data.civilStatus === "1"
                         ? "Soltero"
@@ -254,7 +260,6 @@ const patientDetails = ({ props }) => {
                     }
                     required
                     className={classes.textField}
-                    variant="outlined"
                     //{...register("civilStatus")}
                   />
                 </Grid>
@@ -263,14 +268,15 @@ const patientDetails = ({ props }) => {
                     id="birthay"
                     name="birthay"
                     label="Fecha nacimiento"
+                    variant="outlined"
+                    disabled
                     defaultValue={data.birthay}
                     required
                     className={classes.textField}
-                    variant="outlined"
-                    //{...register("birthay")}
                     InputProps={{
                       readOnly: true,
                     }}
+                    //{...register("birthay")}
                   />
                 </Grid>
               </Grid>
